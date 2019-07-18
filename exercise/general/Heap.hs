@@ -16,28 +16,28 @@ data LeftistHeap a
     deriving (Show)
 
 mergeLeftistHeap :: (Ord a) => LeftistHeap a -> LeftistHeap a -> LeftistHeap a
-mergeLeftistHeap t1 Empty = t1
-mergeLeftistHeap Empty t2 = t2
-mergeLeftistHeap t1@(Node v1 _ _ _) t2@(Node v2 _ _ _)
-    | v1 <= v2  = mergeInner t1 t2
-    | otherwise = mergeInner t2 t1
+mergeLeftistHeap h1 Empty = h1
+mergeLeftistHeap Empty h2 = h2
+mergeLeftistHeap h1@(Node v1 _ _ _) h2@(Node v2 _ _ _)
+    | v1 <= v2  = mergeInner h1 h2
+    | otherwise = mergeInner h2 h1
   where
     mergeInner :: (Ord a) => LeftistHeap a -> LeftistHeap a -> LeftistHeap a
-    mergeInner (Node v _ l r) tLarge
-        | sl <= sr  = Node v (1 + sl) mergedRight l
+    mergeInner (Node v _ l r) hLarge
+        | sl < sr   = Node v (1 + sl) mergedRight l
         | otherwise = Node v (1 + sr) l mergedRight
       where
         getS :: LeftistHeap a -> Int
         getS Empty          = 0
         getS (Node _ s _ _) = s
 
-        mergedRight = mergeLeftistHeap r tLarge
+        mergedRight = mergeLeftistHeap r hLarge
 
         sl = getS l
         sr = getS mergedRight
 
 instance Heap LeftistHeap where
-    insert x t = mergeLeftistHeap (Node x 0 Empty Empty) t
+    insert x h = mergeLeftistHeap (Node x 0 Empty Empty) h
 
     deleteMin Empty          = Nothing
     deleteMin (Node x _ l r) = Just (x, mergeLeftistHeap l r)
