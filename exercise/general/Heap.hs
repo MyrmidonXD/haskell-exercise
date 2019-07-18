@@ -80,3 +80,20 @@ fourth = return ((), exampleHeap) >>= deleteMinChainable >>= deleteMinChainable 
 
 fifth  = return ((), exampleHeap) >>= deleteMinChainable >>= deleteMinChainable >>= deleteMinChainable >>= deleteMinChainable >>= deleteMinChainable
 -- fifth:  Nothing
+
+{-
+ - Heap Sort Example using Leftist Heap
+ -}
+
+unsortedList = [3, 7, 19, 2, 5, 8, 4, 7, 1, 9, 12]
+
+heapSort :: (Ord a) => [a] -> [a]
+heapSort l = 
+    let heap = foldr insert Empty l
+        deleteMinAcc _ (lPrev, hPrev) = case deleteMin hPrev of
+            Just (x, h) -> (x:lPrev, hPrev)
+            Nothing     -> (lPrev, hPrev)
+    in reverse $ fst $ foldr deleteMinAcc ([], heap) l
+
+sortedList = heapSort unsortedList
+-- sortedList: [1,2,3,4,5,7,7,8,9,12,19]
