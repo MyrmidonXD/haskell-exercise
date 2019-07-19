@@ -4,6 +4,7 @@
 -}
 
 import Data.Maybe
+import Data.List (foldl')
 
 class Heap h where
     insert :: (Ord a) => a -> h a -> h a
@@ -89,11 +90,11 @@ unsortedList = [3, 7, 19, 2, 5, 8, 4, 7, 1, 9, 12]
 
 heapSort :: (Ord a) => [a] -> [a]
 heapSort l = 
-    let heap = foldr insert Empty l
-        deleteMinAcc _ (lPrev, hPrev) = case deleteMin hPrev of
-            Just (x, h) -> (x:lPrev, hPrev)
+    let heap = foldl' (flip insert) Empty l
+        deleteMinAcc (lPrev, hPrev) _ = case deleteMin hPrev of
+            Just (x, h) -> (x:lPrev, h)
             Nothing     -> (lPrev, hPrev)
-    in reverse $ fst $ foldr deleteMinAcc ([], heap) l
+    in reverse $ fst $ foldl' deleteMinAcc ([], heap) l
 
 sortedList = heapSort unsortedList
 -- sortedList: [1,2,3,4,5,7,7,8,9,12,19]
