@@ -3,6 +3,14 @@
     Implementation as Min-Heap
 -}
 
+module Heap 
+( LeftistHeap (Empty, Node)
+, insert
+, deleteMin
+, peek
+, heapSort
+) where
+
 import Data.Maybe
 import Data.List (foldl')
 
