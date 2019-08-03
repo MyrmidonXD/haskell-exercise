@@ -22,5 +22,5 @@ cabal.project.local~
 .HTF/
 .ghc.environment.*
 
-## Custom igonre
-**/python/
+## Custom ignore
+**/_test_/
